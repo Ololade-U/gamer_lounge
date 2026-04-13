@@ -5,6 +5,7 @@ import { LuSearch } from "react-icons/lu";
 import { ColorModeButton, useColorMode } from "@/components/ui/color-mode";
 import Header from "@/components/Header";
 import GameGrid from "@/components/GameGrid";
+import usePlatforms from "./hooks/usePlatforms";
 
 export default function Home() {
   const { colorMode } = useColorMode();

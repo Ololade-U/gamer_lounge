@@ -1,7 +1,10 @@
 import { Game } from "@/app/hooks/useGames";
 import { Card, Heading, Image } from "@chakra-ui/react";
+import { Platforms } from "@/app/hooks/usePlatforms"
+import RenderPlatform from "./RenderPlatform";
 
-const GameCard = ({ game }: { game: Game }) => {
+
+const GameCard = ({game}: {game: Game}) => {
   return (
     <Card.Root
       maxW={"sm"}
@@ -14,7 +17,8 @@ const GameCard = ({ game }: { game: Game }) => {
         alt={game.name}
         h={"190px"}
       />
-      <Card.Body p={"1rem .8rem"}>
+      <Card.Body p={"1rem .8rem"} gap={2}>
+        <RenderPlatform game={game} />
         <Heading>{game.name}</Heading>
       </Card.Body>
     </Card.Root>
