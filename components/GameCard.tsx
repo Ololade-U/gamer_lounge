@@ -1,6 +1,5 @@
 import { Game } from "@/app/hooks/useGames";
 import { Card, Heading, Image } from "@chakra-ui/react";
-import { Platforms } from "@/app/hooks/usePlatforms"
 import RenderPlatform from "./RenderPlatform";
 
 

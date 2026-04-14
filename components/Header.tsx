@@ -1,4 +1,5 @@
-import { Heading, Input, InputGroup } from "@chakra-ui/react/";
+"use client";
+import { Heading, Input, InputGroup, ClientOnly } from "@chakra-ui/react/";
 import { LuSearch } from "react-icons/lu";
 import { ColorModeButton } from "./ui/color-mode";
 
@@ -11,7 +12,9 @@ const Header = () => {
       <InputGroup w={"60%"} startElement={<LuSearch />}>
         <Input w={"100%"} borderRadius={"1rem"} placeholder="Search games..." />
       </InputGroup>
-      <ColorModeButton />
+      <ClientOnly>
+        <ColorModeButton />
+      </ClientOnly>
     </>
   );
 };
