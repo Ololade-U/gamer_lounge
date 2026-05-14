@@ -28,13 +28,13 @@ const RenderPlatform = ({ game }: { game: Game }) => {
     web: BsGlobe,
   };
 
-  const icons = game.platforms.map(({ platform }) => {
+  const icons = game.platforms?.map(({ platform }) => {
     const key = Object.keys(iconMap).find((k) => platform.slug.includes(k));
     return key ? iconMap[key] : null;
   });
 
   const uniqueIcons = Array.from(
-    new Set(icons.filter((icon): icon is IconType => icon !== null)),
+    new Set(icons?.filter((icon): icon is IconType => icon !== null)),
   );
 
   return (

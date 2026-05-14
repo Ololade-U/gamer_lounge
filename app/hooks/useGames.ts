@@ -22,18 +22,21 @@ export interface Game {
   name: string;
   rating: number;
   background_image: string;
+  metacritic: number;
   platforms: GamePlatform[];
 }
 
 const useGames = () => {
-  const gameQuery = useGameQueryStore((s) => s.GameQuery);
+  const ordering = useGameQueryStore((s) => s.GameQuery.ordering);
+  const searchParam = useGameQueryStore((s) => s.GameQuery.searchParam);
   const { data, isLoading, error } = useQuery({
-    queryKey: ["games", gameQuery.ordering],
+    queryKey: ["games", ordering, searchParam],
     queryFn: () =>
       apiClient
         .get<FetchGamesResponse>("/api/games", {
           params: {
-            ordering: gameQuery.ordering,
+            ordering: ordering,
+            search: searchParam ? searchParam : "",
           },
         })
         .then((res) => res.data.results),

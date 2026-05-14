@@ -6,6 +6,7 @@ import GameGrid from "@/components/GameGrid";
 import { FaChevronDown } from "react-icons/fa";
 import useGameQueryStore from "@/components/Store";
 import { useEffect, useState } from "react";
+import Nav from "@/components/Nav";
 
 export default function Home() {
   const { colorMode } = useColorMode();
@@ -15,7 +16,7 @@ export default function Home() {
     { label: "Relevance", value: "-rating" },
     { label: "Name", value: "name" },
     { label: "Release Date", value: "-added" },
-    { label: "Metacritic", value: "metacritic" },
+    { label: "Metacritic", value: "-metacritic" },
   ];
 
   const [displaySortValue, setDisplaySortValue] = useState("Relevance");
@@ -28,19 +29,25 @@ export default function Home() {
 
   return (
     <main
-      className={`grid grid-rows-[70px_1fr] grid-cols-[270px_1fr] gap-3 h-[100vh] w-[100%] bg-[#151515] ${colorMode === "dark" ? "bg-[#151515] text-white" : "bg-white text-black"}`}
+      className={`grid grid-rows-[70px_1fr] grid-cols-[220px_1fr] gap-3 h-[100vh] w-[100%] bg-[#151515] ${colorMode === "dark" ? "bg-[#151515] text-white" : "bg-white text-black"}`}
     >
       <section className="col-span-2 w-[100%] flex gap-4 items-center justify-between px-4">
         <Header />
       </section>
-      <nav className="bg-blue-500 text-white">Navigation</nav>
-      <section className="overflow-y-auto p-4">
+      <nav>
+        <Nav />
+      </nav>
+      <section className="overflow-y-auto p-4 overflow-hidden">
         <Heading fontSize={"6xl"} fontWeight={"bolder"} mb={"1rem"}>
           New and trending
         </Heading>
         <Text>Based on player counts and release date</Text>
         <Menus.Root>
-          <Menus.Trigger bg={"#262626"} m={"1.5rem .3rem"} asChild>
+          <Menus.Trigger
+            bg={{ _dark: "#262626", _light: "#E3E3E3" }}
+            m={"1.5rem .3rem"}
+            asChild
+          >
             <Button
               p={"1.2rem 1rem"}
               variant="outline"

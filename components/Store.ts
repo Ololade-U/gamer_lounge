@@ -4,21 +4,22 @@ interface GameQuery {
   genres: string;
   platform: string;
   ordering: string;
-  search: string;
+  searchParam: string;
   page: number;
 }
 
 interface GameQueryStore {
   GameQuery: GameQuery;
   setSortOrder: (ordering: string) => void;
+  setSearchParam: (searchParam: string) => void;
 }
 
 const useGameQueryStore = create<GameQueryStore>((set) => ({
   GameQuery: {
     genres: "",
     platform: "",
-    ordering: "rating",
-    search: "",
+    ordering: "",
+    searchParam: "",
     page: 1,
   },
   setSortOrder: (ordering: string) =>
@@ -28,7 +29,13 @@ const useGameQueryStore = create<GameQueryStore>((set) => ({
         ordering: ordering,
       },
     })),
+  setSearchParam: (searchParam: string) =>
+    set((state) => ({
+      GameQuery: {    
+        ...state.GameQuery,
+        searchParam: searchParam,
+      },
+    })),
 }));
-
 
 export default useGameQueryStore;
