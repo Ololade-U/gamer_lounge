@@ -35,7 +35,7 @@ const Nav = () => {
   return (
     <>
       <Stack
-        pl={"2.5rem"}
+        pl={{ base: "1rem", md: "2.5rem" }}
         h={"full"}
         minH={0}
         minW={0}
@@ -53,7 +53,7 @@ const Nav = () => {
               transitionProperty={"color"}
               transitionDuration={".2s"}
               cursor={"pointer"}
-              fontSize={"2xl"}
+              fontSize={{ base: "lg", md: "2xl" }}
               fontWeight={"bolder"}
               onClick={() => setSortOrder("-rating")}
             >
@@ -68,9 +68,9 @@ const Nav = () => {
             onMouseLeave={() => setActiveItem("")}
           >
             <Box p={".3rem"} bg={wishlistStyles.bg} borderRadius={"20%"}>
-              <GiPresent size={"1.2rem"} fill={wishlistStyles.fill} />
+              <GiPresent size={"1rem"} fill={wishlistStyles.fill} />
             </Box>
-            <Text>Wishlist</Text>
+            <Text fontSize={{ base: "sm", md: "md" }}>Wishlist</Text>
           </Flex>
           <Flex
             alignItems={"center"}
@@ -80,9 +80,9 @@ const Nav = () => {
             onMouseLeave={() => setActiveItem("")}
           >
             <Box p={".3rem"} bg={libraryStyles.bg} borderRadius={"20%"}>
-              <MdOutlineFolderCopy size={"1.2rem"} fill={libraryStyles.fill} />
+              <MdOutlineFolderCopy size={"1rem"} fill={libraryStyles.fill} />
             </Box>
-            <Text>My library</Text>
+            <Text fontSize={{ base: "sm", md: "md" }}>My library</Text>
           </Flex>
           <Link href="/all-games">
             <Heading
@@ -91,7 +91,7 @@ const Nav = () => {
               transitionProperty={"color"}
               transitionDuration={".2s"}
               cursor={"pointer"}
-              fontSize={"2xl"}
+              fontSize={{ base: "lg", md: "2xl" }}
               fontWeight={"bolder"}
             >
               All Games

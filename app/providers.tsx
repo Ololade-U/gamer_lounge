@@ -10,7 +10,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <ColorModeProvider defaultTheme="dark">
+    <ColorModeProvider defaultTheme="dark" enableSystem={false}>
       <Provider>
         <QueryClientProvider client={queryClient}>
           {children}

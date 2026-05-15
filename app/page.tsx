@@ -1,5 +1,17 @@
 "use client";
-import { Heading, Text, Menu as Menus, Portal, Button } from "@chakra-ui/react";
+import {
+  Heading,
+  Text,
+  Menu as Menus,
+  Portal,
+  Button,
+  DrawerRoot,
+  DrawerPositioner,
+  DrawerContent,
+  DrawerCloseTrigger,
+  DrawerHeader,
+  DrawerBody,
+} from "@chakra-ui/react";
 import { useColorMode } from "@/components/ui/color-mode";
 import Header from "@/components/Header";
 import GameGrid from "@/components/GameGrid";
@@ -30,18 +42,25 @@ export default function Home() {
     );
   }, [sortValue]);
 
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   return (
     <main
-      className={`grid grid-rows-[70px_1fr] grid-cols-[220px_1fr] gap-3 h-screen w-full overflow-hidden ${colorMode === "dark" ? "bg-[#151515] text-white" : "bg-white text-black"}`}
+      className={`grid grid-rows-[70px_1fr] grid-cols-1 md:grid-cols-[220px_1fr] gap-3 h-screen w-full overflow-hidden ${colorMode === "dark" ? "bg-[#151515] text-white" : "bg-white text-black"}`}
     >
-      <section className="col-span-2 w-full flex gap-4 items-center justify-between px-4">
-        <Header />
+      <section className="md:col-span-2 w-full flex flex-wrap gap-3 items-center justify-between px-4">
+        <Header onNavOpen={() => setDrawerOpen(true)} />
       </section>
-      <nav className="min-h-0 min-w-0 overflow-hidden">
+      <nav className="hidden md:block min-h-0 min-w-0 overflow-hidden">
         <Nav />
       </nav>
       <section className="min-h-0 min-w-0 overflow-auto p-4 [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <Heading fontSize={"6xl"} fontWeight={"bolder"} my={"1rem"}>
+        <Heading
+          textAlign={{ mdDown: "center" }}
+          fontSize={{ base: "3xl", md: "6xl" }}
+          fontWeight={"bolder"}
+          my={"1rem"}
+        >
           {genreLabel
             ? `${genreLabel} games`
             : platformLabel
@@ -49,13 +68,16 @@ export default function Home() {
               : "New and trending"}
         </Heading>
         {!genreLabel && !platformLabel && (
-          <Text>Based on player counts and release date</Text>
+          <Text textAlign={{ mdDown: "center" }}>
+            Based on player counts and release date
+          </Text>
         )}
         <Menus.Root>
           <Menus.Trigger
             bg={{ _dark: "#262626", _light: "#E3E3E3" }}
             m={"1.5rem .3rem"}
             asChild
+            ml={{ base: "2rem", md: "0" }}
           >
             <Button
               p={"1.2rem 1rem"}
@@ -101,6 +123,26 @@ export default function Home() {
           <GameGrid />
         </ul>
       </section>
+      <DrawerRoot
+        open={drawerOpen}
+        onOpenChange={(details) => setDrawerOpen(details.open)}
+      >
+        <DrawerPositioner justifyContent="flex-end">
+          <DrawerContent w={{ base: "80vw", md: "28rem" }} maxW="100%">
+            <DrawerCloseTrigger asChild>
+              <Button size="sm" variant="ghost" ml={2}>
+                Close
+              </Button>
+            </DrawerCloseTrigger>
+            <DrawerHeader fontSize={{ base: "lg", md: "2xl" }} px={4} py={4}>
+              Menu
+            </DrawerHeader>
+            <DrawerBody px={0} py={4}>
+              <Nav />
+            </DrawerBody>
+          </DrawerContent>
+        </DrawerPositioner>
+      </DrawerRoot>
     </main>
   );
 }
