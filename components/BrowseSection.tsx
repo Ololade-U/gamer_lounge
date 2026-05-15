@@ -1,5 +1,5 @@
 "use client";
-import { Box, Collapsible, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Collapsible, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 import { IoGameController } from "react-icons/io5";
 import { IoMdDownload } from "react-icons/io";
 import { FaGhost } from "react-icons/fa6";
@@ -7,6 +7,7 @@ import { RiFolderOpenFill } from "react-icons/ri";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { useColorMode } from "./ui/color-mode";
 import { useState } from "react";
+import { IoCodeSlash } from "react-icons/io5";
 
 interface BrowseSectionProps {
   activeItem: string;
@@ -65,6 +66,11 @@ const BrowseSection = ({ activeItem, setActiveItem }: BrowseSectionProps) => {
       label: "Genres",
       Icon: FaGhost,
     },
+    {
+      key: "developers",
+      label: "Developers",
+      Icon: IoCodeSlash,
+    },
   ];
 
   const renderBrowseItem = ({
@@ -115,7 +121,9 @@ const BrowseSection = ({ activeItem, setActiveItem }: BrowseSectionProps) => {
       {browseVisibleItems.map((item) => renderBrowseItem(item))}
       <Collapsible.Root open={showAllBrowse}>
         <Collapsible.Content>
-          {browseHiddenItems.map((item) => renderBrowseItem(item))}
+          <Stack gap={".5rem"}>
+            {browseHiddenItems.map((item) => renderBrowseItem(item))}
+          </Stack>
         </Collapsible.Content>
       </Collapsible.Root>
       {browseHiddenItems.length > 0 && (

@@ -17,7 +17,7 @@ const GameCard = ({ game }: { game: Game }) => {
       />
       <Card.Body p={"1rem .8rem"} gap={2}>
         <RenderPlatform game={game} />
-        <Heading>
+        <Heading fontSize={'2xl'}>
           {game.name}
           {game.metacritic > 80
             ? " 🎯"

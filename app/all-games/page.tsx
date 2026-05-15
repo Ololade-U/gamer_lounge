@@ -8,16 +8,16 @@ import useGameQueryStore from "@/components/Store";
 import { useEffect, useState } from "react";
 import Nav from "@/components/Nav";
 
-export default function Home() {
+export default function AllGamesPage() {
   const { colorMode } = useColorMode();
   const sortValue = useGameQueryStore((s) => s.GameQuery.ordering);
-  const platformLabel = useGameQueryStore((s) => s.GameQuery.platformLabel);
-  const genreLabel = useGameQueryStore((s) => s.GameQuery.genreLabel);
   const setSortOrder = useGameQueryStore((s) => s.setSortOrder);
+  const setPlatform = useGameQueryStore((s) => s.setPlatform);
+  const setGenre = useGameQueryStore((s) => s.setGenre);
   const sortOrder = [
     { label: "Relevance", value: "-rating" },
     { label: "Name", value: "name" },
-    { label: "Release Date", value: "-added" },
+    { label: "Release Date", value: "-released" },
     { label: "Metacritic", value: "-metacritic" },
     { label: "Updated", value: "-updated" },
   ];
@@ -30,9 +30,17 @@ export default function Home() {
     );
   }, [sortValue]);
 
+  useEffect(() => {
+    setSortOrder("");
+    setPlatform("", "");
+    setGenre("", "");
+  }, [setSortOrder, setPlatform, setGenre]);
+
   return (
     <main
-      className={`grid grid-rows-[70px_1fr] grid-cols-[220px_1fr] gap-3 h-screen w-full overflow-hidden ${colorMode === "dark" ? "bg-[#151515] text-white" : "bg-white text-black"}`}
+      className={`grid grid-rows-[70px_1fr] grid-cols-[220px_1fr] gap-3 h-screen w-full overflow-hidden ${
+        colorMode === "dark" ? "bg-[#151515] text-white" : "bg-white text-black"
+      }`}
     >
       <section className="col-span-2 w-full flex gap-4 items-center justify-between px-4">
         <Header />
@@ -42,15 +50,8 @@ export default function Home() {
       </nav>
       <section className="min-h-0 min-w-0 overflow-auto p-4 [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <Heading fontSize={"6xl"} fontWeight={"bolder"} my={"1rem"}>
-          {genreLabel
-            ? `${genreLabel} games`
-            : platformLabel
-              ? `Games for ${platformLabel}`
-              : "New and trending"}
+          All Games
         </Heading>
-        {!genreLabel && !platformLabel && (
-          <Text>Based on player counts and release date</Text>
-        )}
         <Menus.Root>
           <Menus.Trigger
             bg={{ _dark: "#262626", _light: "#E3E3E3" }}

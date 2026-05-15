@@ -1,15 +1,19 @@
 "use client";
+import Link from "next/link";
 import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 import { GiPresent } from "react-icons/gi";
 import { useColorMode } from "./ui/color-mode";
 import { MdOutlineFolderCopy } from "react-icons/md";
 import { useState } from "react";
+import useGameQueryStore from "./Store";
 import BrowseSection from "./BrowseSection";
 import PlatformsSection from "./PlatformsSection";
+import GenreSection from "./GenreSection";
 
 const Nav = () => {
   const { colorMode } = useColorMode();
   const [activeItem, setActiveItem] = useState("");
+  const setSortOrder = useGameQueryStore((s) => s.setSortOrder);
 
   const getItemStyles = (item: string) => {
     const isActive = activeItem === item;
@@ -30,19 +34,32 @@ const Nav = () => {
 
   return (
     <>
-      <Stack pl={"2.5rem"} overflow={'auto'}>
+      <Stack
+        pl={"2.5rem"}
+        h={"full"}
+        minH={0}
+        minW={0}
+        overflowY={"auto"}
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        }}
+      >
         <Flex flexDirection={"column"} gap={".5rem"}>
-          <Heading
-            mb={".5rem"}
-            _hover={{ color: "darkgray" }}
-            transitionProperty={"color"}
-            transitionDuration={".2s"}
-            cursor={"pointer"}
-            fontSize={"2xl"}
-            fontWeight={"bolder"}
-          >
-            Home
-          </Heading>
+          <Link href="/">
+            <Heading
+              mb={".5rem"}
+              _hover={{ color: "darkgray" }}
+              transitionProperty={"color"}
+              transitionDuration={".2s"}
+              cursor={"pointer"}
+              fontSize={"2xl"}
+              fontWeight={"bolder"}
+              onClick={() => setSortOrder("-rating")}
+            >
+              Home
+            </Heading>
+          </Link>
           <Flex
             alignItems={"center"}
             cursor={"pointer"}
@@ -67,17 +84,19 @@ const Nav = () => {
             </Box>
             <Text>My library</Text>
           </Flex>
-          <Heading
-            mt={".5rem"}
-            _hover={{ color: "darkgray" }}
-            transitionProperty={"color"}
-            transitionDuration={".2s"}
-            cursor={"pointer"}
-            fontSize={"2xl"}
-            fontWeight={"bolder"}
-          >
-            All Games
-          </Heading>
+          <Link href="/all-games">
+            <Heading
+              mt={".5rem"}
+              _hover={{ color: "darkgray" }}
+              transitionProperty={"color"}
+              transitionDuration={".2s"}
+              cursor={"pointer"}
+              fontSize={"2xl"}
+              fontWeight={"bolder"}
+            >
+              All Games
+            </Heading>
+          </Link>
           <BrowseSection
             activeItem={activeItem}
             setActiveItem={setActiveItem}
@@ -86,6 +105,7 @@ const Nav = () => {
             activeItem={activeItem}
             setActiveItem={setActiveItem}
           />
+          <GenreSection />
         </Flex>
       </Stack>
     </>

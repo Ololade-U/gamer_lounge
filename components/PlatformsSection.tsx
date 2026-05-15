@@ -1,5 +1,14 @@
 "use client";
-import { Box, Collapsible, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Collapsible,
+  Flex,
+  Heading,
+  HStack,
+  Skeleton,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import {
   FaWindows,
   FaPlaystation,
@@ -7,11 +16,16 @@ import {
   FaApple,
   FaLinux,
   FaAndroid,
+  FaGamepad,
 } from "react-icons/fa";
-import { BsNintendoSwitch } from "react-icons/bs";
+import { BsNintendoSwitch, BsGlobe } from "react-icons/bs";
+import { MdPhoneIphone } from "react-icons/md";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+import { IconType } from "react-icons";
 import { useColorMode } from "./ui/color-mode";
 import { useState } from "react";
+import useGameQueryStore from "./Store";
+import usePlatforms, { Platforms } from "@/app/hooks/usePlatforms";
 
 interface PlatformsSectionProps {
   activeItem: string;
@@ -26,8 +40,12 @@ const PlatformsSection = ({
   const [showAllPlatforms, setShowAllPlatforms] = useState(false);
   const [isToggleHovered, setIsToggleHovered] = useState(false);
 
-  const getItemStyles = (item: string) => {
-    const isActive = activeItem === item;
+  const setPlatform = useGameQueryStore((s) => s.setPlatform);
+  const setSortOrder = useGameQueryStore((s) => s.setSortOrder);
+  const selectedPlatform = useGameQueryStore((s) => s.GameQuery.platform);
+
+  const getItemStyles = (item: string, itemId: string) => {
+    const isActive = activeItem === item || selectedPlatform === itemId;
 
     if (isActive) {
       return colorMode === "dark"
@@ -52,55 +70,55 @@ const PlatformsSection = ({
       : { bg: "#ccc", fill: "darkgray" };
   };
 
-  const platforms = [
-    {
-      key: "pc",
-      Icon: FaWindows,
-    },
-    {
-      key: "playstation",
-      Icon: FaPlaystation,
-    },
-    {
-      key: "xbox",
-      Icon: FaXbox,
-    },
-    {
-      key: "mac",
-      Icon: FaApple,
-    },
-    {
-      key: "android",
-      Icon: FaAndroid,
-    },
-    {
-      key: "nintendo",
-      Icon: BsNintendoSwitch,
-    },
-  ];
+  const { data: platforms, isLoading } = usePlatforms();
 
-  const renderPlatformItem = ({ key, Icon }: { key: string; Icon: any }) => {
-    const styles = getItemStyles(key);
+  const iconMap: { [key: string]: IconType } = {
+    pc: FaWindows,
+    playstation: FaPlaystation,
+    xbox: FaXbox,
+    nintendo: BsNintendoSwitch,
+    mac: FaApple,
+    linux: FaLinux,
+    android: FaAndroid,
+    ios: MdPhoneIphone,
+    web: BsGlobe,
+    default: FaGamepad,
+  };
+
+  const getPlatformIcon = (slug: string) => {
+    const key = Object.keys(iconMap).find((candidate) =>
+      slug.includes(candidate),
+    );
+    return iconMap[key ?? "default"];
+  };
+
+  const renderPlatformItem = (platform: Platforms, index: number) => {
+    const Icon = getPlatformIcon(platform.slug);
+    const styles = getItemStyles(platform.slug, String(platform.id));
 
     return (
       <Flex
-        key={key}
+        key={`${platform.id}-${index}`}
         alignItems={"center"}
         cursor={"pointer"}
         gap={".7rem"}
-        onMouseEnter={() => setActiveItem(key)}
+        onMouseEnter={() => setActiveItem(platform.slug)}
         onMouseLeave={() => setActiveItem("")}
+        onClick={() => {
+          setSortOrder("");
+          setPlatform(String(platform.id), platform.name);
+        }}
       >
         <Box p={".3rem"} bg={styles.bg} borderRadius={"20%"}>
           <Icon size={"1.2rem"} fill={styles.fill} />
         </Box>
-        <Text>{key.charAt(0).toUpperCase() + key.slice(1)}</Text>
+        <Text>{platform.name}</Text>
       </Flex>
     );
   };
 
-  const platformVisibleItems = platforms.slice(0, 3);
-  const platformHiddenItems = platforms.slice(3);
+  const platformVisibleItems = platforms?.slice(0, 3) ?? [];
+  const platformHiddenItems = platforms?.slice(3) ?? [];
   const toggleStyles = getToggleStyles();
 
   return (
@@ -116,15 +134,34 @@ const PlatformsSection = ({
       >
         Platforms
       </Heading>
-      {platformVisibleItems.map((item) => renderPlatformItem(item))}
-      <Collapsible.Root open={showAllPlatforms}>
-        <Collapsible.Content>
-          <Stack gap={".5rem"}>
-            {platformHiddenItems.map((item) => renderPlatformItem(item))}
-          </Stack>
-        </Collapsible.Content>
-      </Collapsible.Root>
-      {platformHiddenItems.length > 0 && (
+      {isLoading ? (
+        <Stack gap={".5rem"}>
+          {Array.from({ length: 4 }).map((_, index) => (
+            <>
+              <HStack key={index} gap={".7rem"}>
+                <Skeleton height="2rem" w={"20%"} />
+                <Skeleton height="2rem" w={"70%"} />
+              </HStack>
+            </>
+          ))}
+        </Stack>
+      ) : (
+        <>
+          {platformVisibleItems.map((item, index) =>
+            renderPlatformItem(item, index),
+          )}
+          <Collapsible.Root open={showAllPlatforms}>
+            <Collapsible.Content>
+              <Stack gap={".5rem"}>
+                {platformHiddenItems.map((item, index) =>
+                  renderPlatformItem(item, index),
+                )}
+              </Stack>
+            </Collapsible.Content>
+          </Collapsible.Root>
+        </>
+      )}
+      {!isLoading && platformHiddenItems.length > 0 && (
         <Flex
           alignItems={"center"}
           cursor={"pointer"}

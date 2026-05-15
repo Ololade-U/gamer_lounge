@@ -11,7 +11,7 @@ const Header = () => {
   return (
     <>
       <Heading fontWeight={"extrabold"} ml={"4rem"}>
-        R A W G
+        G A M R
       </Heading>
       <InputGroup
         onChange={(e) => {
