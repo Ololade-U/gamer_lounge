@@ -27,7 +27,7 @@ const Header = ({ onNavOpen }: HeaderProps) => {
       flexWrap="nowrap"
       justifyContent="space-between"
       w="full"
-      px={{ base: "1rem", md: 0 }}
+      px={{ base: ".6rem", md: '2.5rem' }}
     >
       <Heading
         fontSize={{ base: "lg", md: "2xl" }}

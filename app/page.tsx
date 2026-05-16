@@ -54,10 +54,10 @@ export default function Home() {
       <nav className="hidden md:block min-h-0 min-w-0 overflow-hidden">
         <Nav />
       </nav>
-      <section className="min-h-0 min-w-0 overflow-auto p-4 [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <section className="min-h-0 min-w-0 overflow-auto py-4 [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <Heading
           textAlign={{ mdDown: "center" }}
-          fontSize={{ base: "3xl", md: "6xl" }}
+          fontSize={{ base: "4xl", md: "6xl" }}
           fontWeight={"bolder"}
           my={"1rem"}
         >

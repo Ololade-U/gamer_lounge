@@ -16,6 +16,14 @@ const GameCard = ({ game }: { game: Game }) => {
       transition={"transform .2s ease"}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={() => {
+        if (typeof window !== "undefined" && window.matchMedia) {
+          // only toggle on devices that don't support hover (touch/mobile)
+          if (window.matchMedia("(hover: none)").matches) {
+            setIsHovered((s) => !s);
+          }
+        }
+      }}
       _hover={{
         transform: "translateY(-2px)",
         boxShadow: "lg",
@@ -25,13 +33,14 @@ const GameCard = ({ game }: { game: Game }) => {
         borderRadius={".8rem .8rem 0 0"}
         src={game.background_image}
         alt={game.name}
-        h={"190px"}
+        h={{ base: "200px", md: "190px" }}
       />
       <Card.Body p={"1rem .8rem"} gap={2}>
         <HStack justifyContent={"space-between"}>
           <RenderPlatform game={game} />
           <Text
-            border={game.metacritic &&
+            border={
+              game.metacritic &&
               (game.metacritic > 75
                 ? "1.5px solid lightgreen"
                 : game.metacritic > 50
@@ -63,6 +72,21 @@ const GameCard = ({ game }: { game: Game }) => {
                 ? " ⛔"
                 : " 😑"}
         </Heading>
+        <Text
+          display={{ base: "block", md: "none" }}
+          mt={2}
+          textAlign={"center"}
+          textDecoration={"underline"}
+          textDecorationColor={"#d3d3d3"}
+          fontSize={"sm"}
+          cursor={"pointer"}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsHovered((s) => !s);
+          }}
+        >
+          {isHovered ? "View less" : "View more"}
+        </Text>
       </Card.Body>
       <Box
         position={"absolute"}

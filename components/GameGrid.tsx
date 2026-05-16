@@ -73,7 +73,7 @@ const GameGrid = () => {
       <SimpleGrid
         columns={{ sm: 1, md: 2, lg: 3, xlTo2xl: 3 }}
         gap={"1rem"}
-        p={{ mdDown: "0 2rem", smTo2xl: "0 0 2rem" }}
+        p={{ mdDown: "0 .6rem", smTo2xl: "0 0 2rem" }}
       >
         {games?.map((game) => (
           <GameCard key={game.id} game={game} />
