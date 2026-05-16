@@ -77,7 +77,7 @@ export default function AllGamesPage() {
             bg={{ _dark: "#262626", _light: "#E3E3E3" }}
             m={{ base: "1rem 0", md: "1.5rem .3rem" }}
             asChild
-            ml={{base : '2rem', md: '0'}}
+            ml={{base : '.6rem', md: '0'}}
           >
             <Button
               p={{ base: "0.9rem 0.8rem", md: "1.2rem 1rem" }}

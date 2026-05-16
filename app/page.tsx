@@ -77,7 +77,7 @@ export default function Home() {
             bg={{ _dark: "#262626", _light: "#E3E3E3" }}
             m={"1.5rem .3rem"}
             asChild
-            ml={{ base: "2rem", md: "0" }}
+            ml={{ base: ".6rem", md: "0" }}
           >
             <Button
               p={"1.2rem 1rem"}
