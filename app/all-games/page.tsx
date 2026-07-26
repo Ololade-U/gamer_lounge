@@ -25,11 +25,19 @@ export default function AllGamesPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { colorMode } = useColorMode();
   const sortValue = useGameQueryStore((s) => s.GameQuery.ordering);
+  const platformLabel = useGameQueryStore((s) => s.GameQuery.platformLabel);
+  const genreLabel = useGameQueryStore((s) => s.GameQuery.genreLabel);
+  const storeLabel = useGameQueryStore((s) => s.GameQuery.storeLabel);
+  const developerLabel = useGameQueryStore((s) => s.GameQuery.developerLabel);
   const setSortOrder = useGameQueryStore((s) => s.setSortOrder);
   const setPlatform = useGameQueryStore((s) => s.setPlatform);
   const setGenre = useGameQueryStore((s) => s.setGenre);
+  const setStore = useGameQueryStore((s) => s.setStore);
+  const setDeveloper = useGameQueryStore((s) => s.setDeveloper);
+  const activeFilterLabel =
+    genreLabel || platformLabel || storeLabel || developerLabel;
   const sortOrder = [
-    { label: "Trending", value: "" },
+    { label: "Trending", value: "-added" },
     { label: "Relevance", value: "-rating" },
     { label: "Name", value: "name" },
     { label: "Release Date", value: "-released" },
@@ -37,19 +45,21 @@ export default function AllGamesPage() {
     { label: "Updated", value: "-updated" },
   ];
 
-  const [displaySortValue, setDisplaySortValue] = useState("Relevance");
+  const [displaySortValue, setDisplaySortValue] = useState("Trending");
 
   useEffect(() => {
     setDisplaySortValue(
-      sortOrder.find((item) => item.value === sortValue)?.label || "Relevance",
+      sortOrder.find((item) => item.value === sortValue)?.label || "Trending",
     );
   }, [sortValue]);
 
   useEffect(() => {
-    setSortOrder("");
+    setSortOrder("-added");
     setPlatform("", "");
     setGenre("", "");
-  }, [setSortOrder, setPlatform, setGenre]);
+    setStore("", "");
+    setDeveloper("", "");
+  }, [setSortOrder, setPlatform, setGenre, setStore, setDeveloper]);
 
   return (
     <main
@@ -57,20 +67,26 @@ export default function AllGamesPage() {
         colorMode === "dark" ? "bg-[#151515] text-white" : "bg-white text-black"
       }`}
     >
-      <section className="md:col-span-2 w-full flex flex-wrap gap-3 items-center justify-between px-4">
+      <section
+        className="md:col-span-2 w-full flex flex-wrap gap-3 items-center justify-between"
+        style={{ paddingLeft: "1rem", paddingRight: "1rem" }}
+      >
         <Header onNavOpen={() => setDrawerOpen(true)} />
       </section>
       <nav className="hidden md:block min-h-0 min-w-0 overflow-hidden">
         <Nav />
       </nav>
-      <section className="min-h-0 min-w-0 overflow-auto p-4 sm:p-2 [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <section
+        className="min-h-0 min-w-0 overflow-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={{ padding: "1rem" }}
+      >
         <Heading
           fontSize={{ base: "3xl", md: "6xl" }}
           fontWeight={"bolder"}
           my={{ base: "1rem", md: "1rem" }}
           textAlign={{mdDown : 'center'}}
         >
-          All Games
+          {activeFilterLabel ? `${activeFilterLabel} games` : "All Games"}
         </Heading>
         <Menus.Root>
           <Menus.Trigger

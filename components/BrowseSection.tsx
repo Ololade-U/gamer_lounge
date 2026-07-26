@@ -3,7 +3,6 @@ import { Box, Collapsible, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 import { IoGameController } from "react-icons/io5";
 import { IoMdDownload } from "react-icons/io";
 import { FaGhost } from "react-icons/fa6";
-import { RiFolderOpenFill } from "react-icons/ri";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { useColorMode } from "./ui/color-mode";
 import { useState } from "react";
@@ -57,11 +56,6 @@ const BrowseSection = ({ activeItem, setActiveItem }: BrowseSectionProps) => {
       Icon: IoMdDownload,
     },
     {
-      key: "collections",
-      label: "Collections",
-      Icon: RiFolderOpenFill,
-    },
-    {
       key: "genres",
       label: "Genres",
       Icon: FaGhost,
@@ -92,6 +86,11 @@ const BrowseSection = ({ activeItem, setActiveItem }: BrowseSectionProps) => {
         gap={".5rem"}
         onMouseEnter={() => setActiveItem(key)}
         onMouseLeave={() => setActiveItem("")}
+        onClick={() =>
+          document
+            .getElementById(`browse-${key}`)
+            ?.scrollIntoView({ behavior: "smooth", block: "start" })
+        }
       >
         <Box p={".3rem"} bg={styles.bg} borderRadius={"20%"}>
           <Icon size={"1.2rem"} fill={styles.fill} />

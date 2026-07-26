@@ -27,11 +27,12 @@ interface GamePlatform {
 
 export interface Game {
   id: number;
+  slug: string;
   name: string;
   rating: number;
   background_image: string;
   metacritic: number;
-  platforms: GamePlatform[];
+  platforms?: GamePlatform[];
   released?: string;
   genres?: Genre[];
 }
@@ -41,6 +42,8 @@ const useGames = () => {
   const searchParam = useGameQueryStore((s) => s.GameQuery.searchParam);
   const platform = useGameQueryStore((s) => s.GameQuery.platform);
   const genres = useGameQueryStore((s) => s.GameQuery.genres);
+  const store = useGameQueryStore((s) => s.GameQuery.store);
+  const developers = useGameQueryStore((s) => s.GameQuery.developers);
 
   const {
     data,
@@ -50,7 +53,15 @@ const useGames = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["games", ordering, searchParam, platform, genres],
+    queryKey: [
+      "games",
+      ordering,
+      searchParam,
+      platform,
+      genres,
+      store,
+      developers,
+    ],
     queryFn: async ({ pageParam = 1 }: { pageParam?: number }) =>
       apiClient
         .get<FetchGamesResponse>("/api/games", {
@@ -59,6 +70,8 @@ const useGames = () => {
             ...(searchParam ? { search: searchParam } : {}),
             ...(platform ? { platforms: platform } : {}),
             ...(genres ? { genres: genres } : {}),
+            ...(store ? { stores: store } : {}),
+            ...(developers ? { developers: developers } : {}),
             page: pageParam,
           },
         })

@@ -10,42 +10,40 @@ import {
   Text,
 } from "@chakra-ui/react";
 import {
-  FaWindows,
+  FaSteam,
   FaPlaystation,
   FaXbox,
   FaApple,
-  FaLinux,
-  FaAndroid,
+  FaGooglePlay,
+  FaItchIo,
   FaGamepad,
-} from "react-icons/fa";
-import { BsNintendoSwitch, BsGlobe } from "react-icons/bs";
-import { MdPhoneIphone } from "react-icons/md";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+  FaAngleDown,
+  FaAngleUp,
+} from "react-icons/fa6";
+import { SiEpicgames, SiGogdotcom } from "react-icons/si";
+import { BsNintendoSwitch } from "react-icons/bs";
 import { IconType } from "react-icons";
 import { useColorMode } from "./ui/color-mode";
 import { useState } from "react";
 import useGameQueryStore from "./Store";
-import usePlatforms, { Platforms } from "@/app/hooks/usePlatforms";
+import useStores, { Stores } from "@/app/hooks/useStores";
 
-interface PlatformsSectionProps {
+interface StoresSectionProps {
   activeItem: string;
   setActiveItem: (item: string) => void;
 }
 
-const PlatformsSection = ({
-  activeItem,
-  setActiveItem,
-}: PlatformsSectionProps) => {
+const StoresSection = ({ activeItem, setActiveItem }: StoresSectionProps) => {
   const { colorMode } = useColorMode();
-  const [showAllPlatforms, setShowAllPlatforms] = useState(false);
+  const [showAllStores, setShowAllStores] = useState(false);
   const [isToggleHovered, setIsToggleHovered] = useState(false);
 
-  const setPlatform = useGameQueryStore((s) => s.setPlatform);
+  const setStore = useGameQueryStore((s) => s.setStore);
   const setSortOrder = useGameQueryStore((s) => s.setSortOrder);
-  const selectedPlatform = useGameQueryStore((s) => s.GameQuery.platform);
+  const selectedStore = useGameQueryStore((s) => s.GameQuery.store);
 
   const getItemStyles = (item: string, itemId: string) => {
-    const isActive = activeItem === item || selectedPlatform === itemId;
+    const isActive = activeItem === item || selectedStore === itemId;
 
     if (isActive) {
       return colorMode === "dark"
@@ -70,55 +68,55 @@ const PlatformsSection = ({
       : { bg: "#ccc", fill: "darkgray" };
   };
 
-  const { data: platforms, isLoading } = usePlatforms();
+  const { data: stores, isLoading } = useStores();
 
   const iconMap: { [key: string]: IconType } = {
-    pc: FaWindows,
+    steam: FaSteam,
     playstation: FaPlaystation,
     xbox: FaXbox,
+    "epic-games": SiEpicgames,
+    gog: SiGogdotcom,
     nintendo: BsNintendoSwitch,
-    mac: FaApple,
-    linux: FaLinux,
-    android: FaAndroid,
-    ios: MdPhoneIphone,
-    web: BsGlobe,
+    "app-store": FaApple,
+    "google-play": FaGooglePlay,
+    itch: FaItchIo,
     default: FaGamepad,
   };
 
-  const getPlatformIcon = (slug: string) => {
+  const getStoreIcon = (slug: string) => {
     const key = Object.keys(iconMap).find((candidate) =>
       slug.includes(candidate),
     );
     return iconMap[key ?? "default"];
   };
 
-  const renderPlatformItem = (platform: Platforms, index: number) => {
-    const Icon = getPlatformIcon(platform.slug);
-    const styles = getItemStyles(platform.slug, String(platform.id));
+  const renderStoreItem = (store: Stores, index: number) => {
+    const Icon = getStoreIcon(store.slug);
+    const styles = getItemStyles(store.slug, String(store.id));
 
     return (
       <Flex
-        key={`${platform.id}-${index}`}
+        key={`${store.id}-${index}`}
         alignItems={"center"}
         cursor={"pointer"}
         gap={".7rem"}
-        onMouseEnter={() => setActiveItem(platform.slug)}
+        onMouseEnter={() => setActiveItem(store.slug)}
         onMouseLeave={() => setActiveItem("")}
         onClick={() => {
           setSortOrder("-added");
-          setPlatform(String(platform.id), platform.name);
+          setStore(String(store.id), store.name);
         }}
       >
         <Box p={".3rem"} bg={styles.bg} borderRadius={"20%"}>
           <Icon size={"1.2rem"} fill={styles.fill} />
         </Box>
-        <Text>{platform.name}</Text>
+        <Text>{store.name}</Text>
       </Flex>
     );
   };
 
-  const platformVisibleItems = platforms?.slice(0, 3) ?? [];
-  const platformHiddenItems = platforms?.slice(3) ?? [];
+  const storeVisibleItems = stores?.slice(0, 3) ?? [];
+  const storeHiddenItems = stores?.slice(3) ?? [];
   const toggleStyles = getToggleStyles();
 
   return (
@@ -132,7 +130,7 @@ const PlatformsSection = ({
         fontSize={"2xl"}
         fontWeight={"bolder"}
       >
-        Platforms
+        Stores
       </Heading>
       {isLoading ? (
         <Stack gap={".5rem"}>
@@ -145,43 +143,41 @@ const PlatformsSection = ({
         </Stack>
       ) : (
         <>
-          {platformVisibleItems.map((item, index) =>
-            renderPlatformItem(item, index),
+          {storeVisibleItems.map((item, index) =>
+            renderStoreItem(item, index),
           )}
-          <Collapsible.Root open={showAllPlatforms}>
+          <Collapsible.Root open={showAllStores}>
             <Collapsible.Content>
               <Stack gap={".5rem"}>
-                {platformHiddenItems.map((item, index) =>
-                  renderPlatformItem(item, index),
+                {storeHiddenItems.map((item, index) =>
+                  renderStoreItem(item, index),
                 )}
               </Stack>
             </Collapsible.Content>
           </Collapsible.Root>
         </>
       )}
-      {!isLoading && platformHiddenItems.length > 0 && (
+      {!isLoading && storeHiddenItems.length > 0 && (
         <Flex
           alignItems={"center"}
           cursor={"pointer"}
           gap={".7rem"}
           onMouseEnter={() => setIsToggleHovered(true)}
           onMouseLeave={() => setIsToggleHovered(false)}
-          onClick={() => setShowAllPlatforms((prev) => !prev)}
+          onClick={() => setShowAllStores((prev) => !prev)}
         >
           <Box p={".3rem"} bg={toggleStyles.bg} borderRadius={"20%"}>
-            {showAllPlatforms ? (
+            {showAllStores ? (
               <FaAngleUp size={"1.2rem"} fill={toggleStyles.fill} />
             ) : (
               <FaAngleDown size={"1.2rem"} fill={toggleStyles.fill} />
             )}
           </Box>
-          <Text color={"darkgray"}>
-            {showAllPlatforms ? "Hide" : "Show all"}
-          </Text>
+          <Text color={"darkgray"}>{showAllStores ? "Hide" : "Show all"}</Text>
         </Flex>
       )}
     </Flex>
   );
 };
 
-export default PlatformsSection;
+export default StoresSection;

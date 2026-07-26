@@ -1,3 +1,4 @@
+"use client";
 import {
   Box,
   Collapsible,
@@ -6,34 +7,34 @@ import {
   Skeleton,
   Stack,
   Text,
-  Image,
 } from "@chakra-ui/react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+import { MdBusiness } from "react-icons/md";
 import { useState } from "react";
 import { useColorMode } from "./ui/color-mode";
-import useGenres, { Genres } from "@/app/hooks/useGenre";
+import useDevelopers, { Developers } from "@/app/hooks/useDevelopers";
 import useGameQueryStore from "./Store";
 
-const GenreSection = () => {
+const DevelopersSection = () => {
   const { colorMode } = useColorMode();
-  const { data: genres, isLoading } = useGenres();
-  const selectedGenre = useGameQueryStore((s) => s.GameQuery.genres);
-  const setGenre = useGameQueryStore((s) => s.setGenre);
+  const { data: developers, isLoading } = useDevelopers();
+  const selectedDeveloper = useGameQueryStore((s) => s.GameQuery.developers);
+  const setDeveloper = useGameQueryStore((s) => s.setDeveloper);
   const setSortOrder = useGameQueryStore((s) => s.setSortOrder);
-  const [showAllGenres, setShowAllGenres] = useState(false);
+  const [showAllDevelopers, setShowAllDevelopers] = useState(false);
   const [isToggleHovered, setIsToggleHovered] = useState(false);
 
-  const renderGenres = (genre: Genres) => {
-    const isActive = selectedGenre === genre.slug;
+  const renderDeveloper = (developer: Developers) => {
+    const isActive = selectedDeveloper === String(developer.id);
     return (
       <Flex
-        key={genre.id}
+        key={developer.id}
         alignItems={"center"}
         cursor={"pointer"}
         gap={".5rem"}
         onClick={() => {
           setSortOrder("-added");
-          setGenre(genre.slug, genre.name);
+          setDeveloper(String(developer.id), developer.name);
         }}
         bg={isActive ? (colorMode === "dark" ? "#fff" : "#000") : undefined}
         color={isActive ? (colorMode === "dark" ? "#000" : "#fff") : undefined}
@@ -41,21 +42,15 @@ const GenreSection = () => {
         borderRadius={isActive ? ".5rem" : undefined}
       >
         <Box p={".3rem"} borderRadius={"20%"}>
-          <Image
-            src={genre.image_background}
-            alt={genre.name}
-            h={"1.2rem"}
-            w={"1.5rem"}
-            borderRadius={"20%"}
-          />
+          <MdBusiness size={"1.2rem"} />
         </Box>
-        <Text>{genre.name}</Text>
+        <Text>{developer.name}</Text>
       </Flex>
     );
   };
 
-  const visibleGenres = genres?.slice(0, 4) ?? [];
-  const hiddenGenres = genres?.slice(4) ?? [];
+  const visibleDevelopers = developers?.slice(0, 4) ?? [];
+  const hiddenDevelopers = developers?.slice(4) ?? [];
 
   const getToggleStyles = () => {
     if (isToggleHovered) {
@@ -82,7 +77,7 @@ const GenreSection = () => {
         fontSize={"2xl"}
         fontWeight={"bolder"}
       >
-        Genres
+        Developers
       </Heading>
       {isLoading ? (
         <Stack gap={".5rem"} py={".5rem"}>
@@ -92,32 +87,36 @@ const GenreSection = () => {
         </Stack>
       ) : (
         <Flex flexDirection={"column"} gap={".5rem"} py={".5rem"}>
-          {visibleGenres.map((genre) => renderGenres(genre))}
-          <Collapsible.Root open={showAllGenres}>
+          {visibleDevelopers.map((developer) => renderDeveloper(developer))}
+          <Collapsible.Root open={showAllDevelopers}>
             <Collapsible.Content>
               <Stack gap={".5rem"}>
-                {hiddenGenres.map((genre) => renderGenres(genre))}
+                {hiddenDevelopers.map((developer) =>
+                  renderDeveloper(developer),
+                )}
               </Stack>
             </Collapsible.Content>
           </Collapsible.Root>
-          {hiddenGenres.length > 0 && (
+          {hiddenDevelopers.length > 0 && (
             <Flex
               alignItems={"center"}
               cursor={"pointer"}
               gap={".5rem"}
               onMouseEnter={() => setIsToggleHovered(true)}
               onMouseLeave={() => setIsToggleHovered(false)}
-              onClick={() => setShowAllGenres((prev) => !prev)}
+              onClick={() => setShowAllDevelopers((prev) => !prev)}
             >
               <Box p={".3rem"} bg={toggleStyles.bg} borderRadius={"20%"}>
-                {showAllGenres ? (
+                {showAllDevelopers ? (
                   <FaAngleUp size={"1.2rem"} fill={toggleStyles.fill} />
                 ) : (
                   <FaAngleDown size={"1.2rem"} fill={toggleStyles.fill} />
                 )}
               </Box>
               <Text color={"darkgray"}>
-                {showAllGenres ? "Hide" : `Show all (${hiddenGenres.length})`}
+                {showAllDevelopers
+                  ? "Hide"
+                  : `Show all (${hiddenDevelopers.length})`}
               </Text>
             </Flex>
           )}
@@ -127,4 +126,4 @@ const GenreSection = () => {
   );
 };
 
-export default GenreSection;
+export default DevelopersSection;

@@ -8,12 +8,17 @@ import { useState } from "react";
 import useGameQueryStore from "./Store";
 import BrowseSection from "./BrowseSection";
 import PlatformsSection from "./PlatformsSection";
+import StoresSection from "./StoresSection";
 import GenreSection from "./GenreSection";
+import DevelopersSection from "./DevelopersSection";
+import useLibraryStore from "./LibraryStore";
 
 const Nav = () => {
   const { colorMode } = useColorMode();
   const [activeItem, setActiveItem] = useState("");
   const setSortOrder = useGameQueryStore((s) => s.setSortOrder);
+  const wishlistCount = useLibraryStore((s) => s.wishlist.length);
+  const libraryCount = useLibraryStore((s) => s.library.length);
 
   const getItemStyles = (item: string) => {
     const isActive = activeItem === item;
@@ -55,35 +60,43 @@ const Nav = () => {
               cursor={"pointer"}
               fontSize={{ base: "lg", md: "2xl" }}
               fontWeight={"bolder"}
-              onClick={() => setSortOrder("-rating")}
+              onClick={() => setSortOrder("-added")}
             >
               Home
             </Heading>
           </Link>
-          <Flex
-            alignItems={"center"}
-            cursor={"pointer"}
-            gap={".5rem"}
-            onMouseEnter={() => setActiveItem("wishlist")}
-            onMouseLeave={() => setActiveItem("")}
-          >
-            <Box p={".3rem"} bg={wishlistStyles.bg} borderRadius={"20%"}>
-              <GiPresent size={"1rem"} fill={wishlistStyles.fill} />
-            </Box>
-            <Text fontSize={{ base: "sm", md: "md" }}>Wishlist</Text>
-          </Flex>
-          <Flex
-            alignItems={"center"}
-            cursor={"pointer"}
-            gap={".5rem"}
-            onMouseEnter={() => setActiveItem("library")}
-            onMouseLeave={() => setActiveItem("")}
-          >
-            <Box p={".3rem"} bg={libraryStyles.bg} borderRadius={"20%"}>
-              <MdOutlineFolderCopy size={"1rem"} fill={libraryStyles.fill} />
-            </Box>
-            <Text fontSize={{ base: "sm", md: "md" }}>My library</Text>
-          </Flex>
+          <Link href="/wishlist">
+            <Flex
+              alignItems={"center"}
+              cursor={"pointer"}
+              gap={".5rem"}
+              onMouseEnter={() => setActiveItem("wishlist")}
+              onMouseLeave={() => setActiveItem("")}
+            >
+              <Box p={".3rem"} bg={wishlistStyles.bg} borderRadius={"20%"}>
+                <GiPresent size={"1rem"} fill={wishlistStyles.fill} />
+              </Box>
+              <Text fontSize={{ base: "sm", md: "md" }}>
+                Wishlist{wishlistCount > 0 ? ` (${wishlistCount})` : ""}
+              </Text>
+            </Flex>
+          </Link>
+          <Link href="/library">
+            <Flex
+              alignItems={"center"}
+              cursor={"pointer"}
+              gap={".5rem"}
+              onMouseEnter={() => setActiveItem("library")}
+              onMouseLeave={() => setActiveItem("")}
+            >
+              <Box p={".3rem"} bg={libraryStyles.bg} borderRadius={"20%"}>
+                <MdOutlineFolderCopy size={"1rem"} fill={libraryStyles.fill} />
+              </Box>
+              <Text fontSize={{ base: "sm", md: "md" }}>
+                My library{libraryCount > 0 ? ` (${libraryCount})` : ""}
+              </Text>
+            </Flex>
+          </Link>
           <Link href="/all-games">
             <Heading
               mt={".5rem"}
@@ -101,11 +114,24 @@ const Nav = () => {
             activeItem={activeItem}
             setActiveItem={setActiveItem}
           />
-          <PlatformsSection
-            activeItem={activeItem}
-            setActiveItem={setActiveItem}
-          />
-          <GenreSection />
+          <Box id="browse-platforms">
+            <PlatformsSection
+              activeItem={activeItem}
+              setActiveItem={setActiveItem}
+            />
+          </Box>
+          <Box id="browse-stores">
+            <StoresSection
+              activeItem={activeItem}
+              setActiveItem={setActiveItem}
+            />
+          </Box>
+          <Box id="browse-genres">
+            <GenreSection />
+          </Box>
+          <Box id="browse-developers">
+            <DevelopersSection />
+          </Box>
         </Flex>
       </Stack>
     </>

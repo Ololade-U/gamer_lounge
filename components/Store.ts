@@ -5,6 +5,10 @@ interface GameQuery {
   genreLabel: string;
   platform: string;
   platformLabel: string;
+  store: string;
+  storeLabel: string;
+  developers: string;
+  developerLabel: string;
   ordering: string;
   searchParam: string;
   page: number;
@@ -16,6 +20,8 @@ interface GameQueryStore {
   setSearchParam: (searchParam: string) => void;
   setPlatform: (platform: string, platformLabel?: string) => void;
   setGenre: (genres: string, genreLabel?: string) => void;
+  setStore: (store: string, storeLabel?: string) => void;
+  setDeveloper: (developers: string, developerLabel?: string) => void;
 }
 
 const useGameQueryStore = create<GameQueryStore>((set) => ({
@@ -24,7 +30,11 @@ const useGameQueryStore = create<GameQueryStore>((set) => ({
     genreLabel: "",
     platform: "",
     platformLabel: "",
-    ordering: "-rating",
+    store: "",
+    storeLabel: "",
+    developers: "",
+    developerLabel: "",
+    ordering: "-added",
     searchParam: "",
     page: 1,
   },
@@ -48,6 +58,12 @@ const useGameQueryStore = create<GameQueryStore>((set) => ({
         ...state.GameQuery,
         platform: platform,
         platformLabel: platformLabel ?? "",
+        genres: "",
+        genreLabel: "",
+        store: "",
+        storeLabel: "",
+        developers: "",
+        developerLabel: "",
       },
     })),
   setGenre: (genres: string, genreLabel?: string) =>
@@ -56,6 +72,40 @@ const useGameQueryStore = create<GameQueryStore>((set) => ({
         ...state.GameQuery,
         genres: genres,
         genreLabel: genreLabel ?? "",
+        platform: "",
+        platformLabel: "",
+        store: "",
+        storeLabel: "",
+        developers: "",
+        developerLabel: "",
+      },
+    })),
+  setStore: (store: string, storeLabel?: string) =>
+    set((state) => ({
+      GameQuery: {
+        ...state.GameQuery,
+        store: store,
+        storeLabel: storeLabel ?? "",
+        platform: "",
+        platformLabel: "",
+        genres: "",
+        genreLabel: "",
+        developers: "",
+        developerLabel: "",
+      },
+    })),
+  setDeveloper: (developers: string, developerLabel?: string) =>
+    set((state) => ({
+      GameQuery: {
+        ...state.GameQuery,
+        developers: developers,
+        developerLabel: developerLabel ?? "",
+        platform: "",
+        platformLabel: "",
+        genres: "",
+        genreLabel: "",
+        store: "",
+        storeLabel: "",
       },
     })),
 }));

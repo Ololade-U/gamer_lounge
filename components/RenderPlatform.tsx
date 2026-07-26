@@ -1,4 +1,3 @@
-import { Game } from "@/app/hooks/useGames";
 import { Icon, HStack } from "@chakra-ui/react";
 import {
   FaWindows,
@@ -14,7 +13,11 @@ import { BsGlobe } from "react-icons/bs";
 import { IconType } from "react-icons";
 import { useColorMode } from "./ui/color-mode";
 
-const RenderPlatform = ({ game }: { game: Game }) => {
+interface PlatformEntry {
+  platform: { slug: string };
+}
+
+const RenderPlatform = ({ platforms }: { platforms?: PlatformEntry[] }) => {
   const { colorMode } = useColorMode();
   const iconMap: { [key: string]: IconType } = {
     pc: FaWindows,
@@ -28,7 +31,7 @@ const RenderPlatform = ({ game }: { game: Game }) => {
     web: BsGlobe,
   };
 
-  const icons = game.platforms?.map(({ platform }) => {
+  const icons = platforms?.map(({ platform }) => {
     const key = Object.keys(iconMap).find((k) => platform.slug.includes(k));
     return key ? iconMap[key] : null;
   });

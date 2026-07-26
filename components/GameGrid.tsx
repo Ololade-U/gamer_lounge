@@ -57,6 +57,7 @@ const GameGrid = () => {
     return (
       <SimpleGrid
         columns={{ sm: 1, md: 2, lg: 3, xlTo2xl: 3 }}
+        justifyItems={{ base: "center", md: "stretch" }}
         gap={"1rem"}
         p={{ mdDown: "0 2rem", smTo2xl: "0 0 2rem" }}
       >
@@ -72,6 +73,7 @@ const GameGrid = () => {
     <Box>
       <SimpleGrid
         columns={{ sm: 1, md: 2, lg: 3, xlTo2xl: 3 }}
+        justifyItems={{ base: "center", md: "stretch" }}
         gap={"1rem"}
         p={{ mdDown: "0 .6rem", smTo2xl: "0 0 2rem" }}
       >

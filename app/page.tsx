@@ -25,20 +25,25 @@ export default function Home() {
   const sortValue = useGameQueryStore((s) => s.GameQuery.ordering);
   const platformLabel = useGameQueryStore((s) => s.GameQuery.platformLabel);
   const genreLabel = useGameQueryStore((s) => s.GameQuery.genreLabel);
+  const storeLabel = useGameQueryStore((s) => s.GameQuery.storeLabel);
+  const developerLabel = useGameQueryStore((s) => s.GameQuery.developerLabel);
   const setSortOrder = useGameQueryStore((s) => s.setSortOrder);
+  const activeFilterLabel =
+    genreLabel || platformLabel || storeLabel || developerLabel;
   const sortOrder = [
+    { label: "Trending", value: "-added" },
     { label: "Relevance", value: "-rating" },
     { label: "Name", value: "name" },
-    { label: "Release Date", value: "-added" },
+    { label: "Release Date", value: "-released" },
     { label: "Metacritic", value: "-metacritic" },
     { label: "Updated", value: "-updated" },
   ];
 
-  const [displaySortValue, setDisplaySortValue] = useState("Relevance");
+  const [displaySortValue, setDisplaySortValue] = useState("Trending");
 
   useEffect(() => {
     setDisplaySortValue(
-      sortOrder.find((item) => item.value === sortValue)?.label || "Relevance",
+      sortOrder.find((item) => item.value === sortValue)?.label || "Trending",
     );
   }, [sortValue]);
 
@@ -48,28 +53,30 @@ export default function Home() {
     <main
       className={`grid grid-rows-[70px_1fr] grid-cols-1 md:grid-cols-[220px_1fr] gap-3 h-screen w-full overflow-hidden ${colorMode === "dark" ? "bg-[#151515] text-white" : "bg-white text-black"}`}
     >
-      <section className="md:col-span-2 w-full flex flex-wrap gap-3 items-center justify-between px-4">
+      <section
+        className="md:col-span-2 w-full flex flex-wrap gap-3 items-center justify-between"
+        style={{ paddingLeft: "1rem", paddingRight: "1rem" }}
+      >
         <Header onNavOpen={() => setDrawerOpen(true)} />
       </section>
       <nav className="hidden md:block min-h-0 min-w-0 overflow-hidden">
         <Nav />
       </nav>
-      <section className="min-h-0 min-w-0 overflow-auto py-4 [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <section
+        className="min-h-0 min-w-0 overflow-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={{ paddingTop: "1rem", paddingBottom: "1rem" }}
+      >
         <Heading
           textAlign={{ mdDown: "center" }}
           fontSize={{ base: "4xl", md: "6xl" }}
           fontWeight={"bolder"}
           my={"1rem"}
         >
-          {genreLabel
-            ? `${genreLabel} games`
-            : platformLabel
-              ? `Games for ${platformLabel}`
-              : "New and trending"}
+          {activeFilterLabel ? `${activeFilterLabel} games` : "All Games"}
         </Heading>
-        {!genreLabel && !platformLabel && (
+        {!activeFilterLabel && (
           <Text textAlign={{ mdDown: "center" }}>
-            Based on player counts and release date
+            The most popular games right now
           </Text>
         )}
         <Menus.Root>
