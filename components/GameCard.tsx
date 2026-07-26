@@ -34,7 +34,9 @@ const GameCard = ({ game }: { game: Game }) => {
   return (
     <Link href={`/games/${game.slug}`} style={{ display: "block" }}>
       <Card.Root
+        w={"full"}
         maxW={"sm"}
+        mx={"auto"}
         borderRadius={".8rem"}
         bg={{ _dark: "#202020", _light: "#e3e3e3" }}
         overflow={"visible"}

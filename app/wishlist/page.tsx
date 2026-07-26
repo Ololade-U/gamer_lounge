@@ -56,7 +56,6 @@ export default function WishlistPage() {
         ) : (
           <SimpleGrid
             columns={{ sm: 1, md: 2, lg: 3, xlTo2xl: 3 }}
-            justifyItems={{ base: "center", md: "stretch" }}
             gap={"1rem"}
           >
             {wishlist.map((game) => (

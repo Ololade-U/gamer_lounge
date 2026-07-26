@@ -56,7 +56,6 @@ export default function LibraryPage() {
         ) : (
           <SimpleGrid
             columns={{ sm: 1, md: 2, lg: 3, xlTo2xl: 3 }}
-            justifyItems={{ base: "center", md: "stretch" }}
             gap={"1rem"}
           >
             {library.map((game) => (
